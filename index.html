@@ -4,6 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coolibah - For Support Workers</title>
+
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SEPD1T11F3"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-SEPD1T11F3');
+
+        // Parse UTM parameters and store them
+        function getUTMParams() {
+            const params = new URLSearchParams(window.location.search);
+            const utms = {};
+            ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'].forEach(key => {
+                if (params.get(key)) utms[key] = params.get(key);
+            });
+            return utms;
+        }
+        const utmParams = getUTMParams();
+        if (Object.keys(utmParams).length > 0) {
+            gtag('set', 'campaign', utmParams);
+        }
+    </script>
     <style>
         * {
             margin: 0;
@@ -260,6 +283,28 @@
             text-align: center;
         }
 
+        .cta-button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .cta-button .spinner {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
         /* Mobile Responsiveness */
         @media (max-width: 768px) {
             .hero h1 {
@@ -467,6 +512,10 @@
 
     <script>
         function scrollToForm() {
+            gtag('event', 'cta_click', {
+                event_category: 'engagement',
+                event_label: 'hero_join_button'
+            });
             document.getElementById('waitlist').scrollIntoView({ behavior: 'smooth' });
             setTimeout(() => {
                 document.getElementById('email').focus();
@@ -474,13 +523,30 @@
         }
 
         let formData = {};
+        let emailSubmitting = false;
+        let surveySubmitting = false;
 
         async function handleStep1(event) {
             event.preventDefault();
+
+            // Prevent double submission
+            if (emailSubmitting) return;
+            emailSubmitting = true;
+
+            // Show loading state
+            const btn = document.querySelector('#step1Form .cta-button');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span>Joining...';
             
             // Save email
             formData.email = document.getElementById('email').value;
             formData.timestamp = new Date().toISOString();
+
+            // GA4: track email submission
+            gtag('event', 'funnel_email_submitted', {
+                event_category: 'signup_funnel',
+                event_label: 'email_captured'
+            });
             
             // Submit email immediately
             try {
@@ -500,12 +566,27 @@
         }
 
         function showSurvey() {
+            // GA4: track survey started
+            gtag('event', 'funnel_survey_started', {
+                event_category: 'signup_funnel',
+                event_label: 'survey_started'
+            });
+
             document.getElementById('transitionMessage').style.display = 'none';
             document.getElementById('step2Form').style.display = 'block';
         }
 
         async function handleStep2(event) {
             event.preventDefault();
+
+            // Prevent double submission
+            if (surveySubmitting) return;
+            surveySubmitting = true;
+
+            // Show loading state
+            const btn = document.querySelector('#step2Form .cta-button');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span>Submitting...';
             
             // Collect all additional form data
             formData.name = document.getElementById('name').value;
@@ -529,6 +610,14 @@
                 });
                 
                 console.log('Form submitted successfully');
+
+                // GA4: track survey completed
+                gtag('event', 'funnel_survey_completed', {
+                    event_category: 'signup_funnel',
+                    event_label: 'survey_completed',
+                    is_worker: formData.is_worker,
+                    source: formData.source
+                });
                 
                 // Show confirmation
                 document.getElementById('step2Form').style.display = 'none';
