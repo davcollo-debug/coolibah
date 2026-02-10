@@ -372,6 +372,16 @@
                     <button type="submit" class="cta-button">Join</button>
                 </form>
 
+                <!-- Transition message -->
+                <div id="transitionMessage" style="display: none;">
+                    <div style="background: white; padding: 40px; border-radius: 16px; border: 1px solid #e8e5e1; text-align: center;">
+                        <div style="font-size: 4rem; margin-bottom: 16px;">🎉</div>
+                        <h3 style="color: #2c2c2c; font-size: 1.75rem; margin-bottom: 16px; font-weight: 600;">You're on the list!</h3>
+                        <p style="color: #5a5a5a; font-size: 1.1rem; line-height: 1.6; margin-bottom: 32px;">Coolibah is still being built. We'll let you know when it's ready, but in the mean time it'd be great if you could answer a few quick questions.</p>
+                        <button class="cta-button" onclick="showSurvey()">Sure, let's go</button>
+                    </div>
+                </div>
+
                 <!-- Step 2: Additional info -->
                 <form id="step2Form" onsubmit="handleStep2(event)" style="display: none;">
                     <div style="margin-bottom: 20px;">
@@ -465,15 +475,32 @@
 
         let formData = {};
 
-        function handleStep1(event) {
+        async function handleStep1(event) {
             event.preventDefault();
             
             // Save email
             formData.email = document.getElementById('email').value;
             formData.timestamp = new Date().toISOString();
             
-            // Hide step 1, show step 2
+            // Submit email immediately
+            try {
+                await fetch('https://script.google.com/macros/s/AKfycbyHyy9px6kKQzl61F59u5JW-LbnnoiQoEGoUaTzN5eavAE6-zQceRvGBSjemrvkdTPh/exec', {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: formData.email, timestamp: formData.timestamp })
+                });
+            } catch (error) {
+                console.error('Error submitting email:', error);
+            }
+            
+            // Hide step 1, show transition message
             document.getElementById('step1Form').style.display = 'none';
+            document.getElementById('transitionMessage').style.display = 'block';
+        }
+
+        function showSurvey() {
+            document.getElementById('transitionMessage').style.display = 'none';
             document.getElementById('step2Form').style.display = 'block';
         }
 
