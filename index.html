@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coolibah - For Support Workers</title>
 
+    <!-- Google Fonts - Fraunces for logo -->
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,300&display=swap" rel="stylesheet">
+
     <!-- Google Analytics 4 -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-SEPD1T11F3"></script>
     <script>
@@ -55,20 +58,17 @@
         }
 
         .logo {
-            font-size: 1.75rem;
+            font-family: 'Fraunces', Georgia, 'Times New Roman', serif;
+            font-size: 2rem;
             font-weight: 700;
-            color: #2c2c2c;
             text-decoration: none;
-            font-family: 'Tiempos Text', Georgia, 'Times New Roman', serif;
-            letter-spacing: -0.01em;
+            letter-spacing: -0.5px;
             display: inline-flex;
             align-items: center;
-            gap: 0px;
-        }
-
-        .logo-icon {
-            width: 48px;
-            height: 48px;
+            background: linear-gradient(135deg, #4ECDC4, #F2994A);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         /* Hero Section */
@@ -107,7 +107,7 @@
         }
 
         .hero .highlight {
-            background: linear-gradient(135deg, #6ba854 0%, #5a9547 100%);
+            background: linear-gradient(135deg, #4ECDC4 0%, #F2994A 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -125,7 +125,7 @@
 
         .cta-button {
             display: inline-block;
-            background: #6ba854;
+            background: linear-gradient(135deg, #4ECDC4, #3DBDB5);
             color: white;
             padding: 16px 32px;
             font-size: 1rem;
@@ -135,13 +135,13 @@
             transition: all 0.2s ease;
             cursor: pointer;
             border: none;
-            box-shadow: 0 4px 12px rgba(168, 198, 159, 0.3);
+            box-shadow: 0 4px 12px rgba(78, 205, 196, 0.3);
         }
 
         .cta-button:hover {
-            background: #5a9547;
+            background: linear-gradient(135deg, #3DBDB5, #2EADA5);
             transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(168, 198, 159, 0.4);
+            box-shadow: 0 8px 24px rgba(78, 205, 196, 0.4);
         }
 
         /* Benefits Section */
@@ -252,7 +252,7 @@
 
         #email:focus {
             outline: none;
-            border-color: #6ba854;
+            border-color: #4ECDC4;
             background: white;
         }
 
@@ -344,7 +344,6 @@
     <header>
         <div class="container">
             <a href="#" class="logo">
-                <img src="coolibah-logo.png" alt="Coolibah" class="logo-icon">
                 Coolibah
             </a>
         </div>
